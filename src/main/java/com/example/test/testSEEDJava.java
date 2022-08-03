@@ -5,11 +5,11 @@ import java.util.Base64;
 
 public class testSEEDJava {
     static String charset = "utf-8";
-    static String plainText = "userid123";
+    static String plainText = "평문입력";
 
     static Base64.Decoder decoder = Base64.getDecoder();
-    public static byte pbUserKey[] = decoder.decode("QFRTVFlzQm1Lc0pjTmdDag==".getBytes());
-    public static byte bszIV[] = "STDpayForStdpayT".getBytes();
+    public static byte pbUserKey[] = decoder.decode("Seed Key 입력".getBytes());
+    public static byte bszIV[] = "Seed IV 입력".getBytes();
 
     public static void main(String[] args){
         // TODO Auto-generated method stub
