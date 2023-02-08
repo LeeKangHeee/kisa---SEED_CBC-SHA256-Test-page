@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.test.Controller;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,11 @@ public class Controller {
     @GetMapping("/")
     public String home(){
         return "home";
+    }
+
+    @GetMapping("/enchome")
+    public String enchome(){
+        return "dec_enc_home";
     }
 
     @RequestMapping("/cbc")
