@@ -13,11 +13,12 @@
 
     //경로그림정보
     var drawInfoArr = [];
-
+    var list =[];
+    var list2= [];
+    var list3 =[];
 
     function initTmap(){
-
-      // 1. 지도 띄우기
+      // 지도 띄우기
       map = new Tmapv2.Map("map_div", {
         center: new Tmapv2.LatLng(35.859644221599574, 128.53585826499167),
         width : "1210px",
@@ -36,49 +37,66 @@
         map:map
       });
 
+
+      list.push({"lat":"35.849644221599574", "lot":"128.83585826499167"});
+      list.push({"lat":"35.839644221599574", "lot":"128.93585826499167"});
+      list.push({"lat":"35.809644221599574", "lot":"128.23585826499167"});
+      list.push({"lat":"35.829644221599574", "lot":"128.13585826499167"});
+      drawLine(list,1);
+
+
+      list2.push({"lat":"35.959644221599574", "lot":"128.84585826499167"});
+      list2.push({"lat":"35.949644221599574", "lot":"128.94585826499167"});
+      list2.push({"lat":"35.919644221599574", "lot":"128.24585826499167"});
+      list2.push({"lat":"35.939644221599574", "lot":"128.14585826499167"});
+      drawLine(list2,2)
+
+      list3.push({"lat":"35.159644221599574", "lot":"128.89585826499167"});
+      list3.push({"lat":"35.249644221599574", "lot":"128.91585826499167"});
+      list3.push({"lat":"35.519644221599574", "lot":"128.20585826499167"});
+      list3.push({"lat":"35.939644221599574", "lot":"128.07585826499167"});
+      drawLine(list3,3)
+
+    }
+
+
+    function drawLine(data, index){
+
       var json = new Object();
       var jsonArray = new Array();
+      var viaPoints =[]; // 경로포인트 찍기
 
+      for(var i=0; i<data.length; i++){
+        json.lat = data[i].lat;
+        json.lot = data[i].lot;
+        jsonArray.push(json);
+        json = {};
+      }
 
-      json.lat ="35.849644221599574";
-      json.lot ="128.83585826499167";
-      jsonArray.push(json);
-      json={};
-
-      json.lat ="35.839644221599574";
-      json.lot ="128.93585826499167";
-      jsonArray.push(json);
-      json={};
-
-      json={};
-      json.lat ="35.809644221599574";
-      json.lot ="128.23585826499167";
-      jsonArray.push(json);
-      json={};
-
-
-      json.lat ="35.829644221599574";
-      json.lot ="128.13585826499167";
-      jsonArray.push(json);
-      json={};
-
-      console.log(jsonArray);
       //var sJson = JSON.stringify(jsonArray);
-
 
       for(var i =0; i<jsonArray.length; i++){
         marker = new Tmapv2.Marker({
           position : new Tmapv2.LatLng(jsonArray[i].lat, jsonArray[i].lot),
-          icon : "https://jangbogovrp.web.app/images/makers/marker_22.png",
+          icon : "https://jangbogovrp.web.app/images/makers/marker_"+index+".png",
           iconSize : new Tmapv2.Size(24, 38),
           map:map
         });
+
+        viaPoints.push( {
+          "viaPointId": "test" + i,
+          "viaPointName": "test" + i,
+          "viaX": jsonArray[i].lot,
+          "viaY": jsonArray[i].lat,
+        });
+
       }
 
 
       var headers = {};
       headers["appKey"]="0de9ecde-b87c-404c-b7f8-be4ed7b85d4f";
-      var viaPoints ={};
+
+
 
 
       $.ajax({
@@ -98,32 +116,7 @@
           "endX": "128.53585826499167",
           "endY": "35.859644221599574",
           "searchOption" : "0",
-          "viaPoints": [
-            {
-              "viaPointId": "test01",
-              "viaPointName": "test01",
-              "viaX": "128.83585826499167",
-              "viaY": "35.849644221599574",
-            },
-            {
-              "viaPointId": "test02",
-              "viaPointName": "test02",
-              "viaX": "128.93585826499167",
-              "viaY": "35.839644221599574",
-            },
-            {
-              "viaPointId": "test03",
-              "viaPointName": "test03",
-              "viaX": "128.23585826499167",
-              "viaY": "35.809644221599574",
-            },
-            {
-              "viaPointId": "test04",
-              "viaPointName": "test04",
-              "viaX": "128.13585826499167",
-              "viaY": "35.829644221599574",
-            }
-          ]
+          "viaPoints": viaPoints
         }),
         success:function(response){
           var resultData = response.properties;
@@ -159,12 +152,31 @@
                 drawInfoArr.push(convertChange);
               }
 
-              polyline_ = new Tmapv2.Polyline({
-                path : drawInfoArr,
-                strokeColor : "#ffe600",
-                strokeWeight: 6,
-                map : map
-              });
+
+              if(index==1){
+                polyline_ = new Tmapv2.Polyline({
+                  path : drawInfoArr,
+                  strokeColor : "#ff0000",
+                  strokeWeight: 6,
+                  map : map
+                });
+              }else if(index==2){
+                polyline_ = new Tmapv2.Polyline({
+                  path : drawInfoArr,
+                  strokeColor : "#00ff33",
+                  strokeWeight: 6,
+                  map : map
+                });
+              }else{
+                  polyline_ = new Tmapv2.Polyline({
+                    path : drawInfoArr,
+                    strokeColor : "#00fff7",
+                    strokeWeight: 6,
+                    map : map
+                  });
+              }
+
+
             }
           }
         },
